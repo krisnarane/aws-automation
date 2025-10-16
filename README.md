@@ -15,8 +15,9 @@ O fluxo de dados principal segue o seguinte caminho:
 3.  **Processamento**: Uma função AWS Lambda é invocada pelo evento do S3, recebendo os detalhes do arquivo.
 4.  **Armazenamento**: A função Lambda lê o conteúdo do arquivo `.json`, processa os dados de cada nota fiscal e os insere em uma tabela no DynamoDB.
 
-**Fluxo:**
-<img width="863" height="643" alt="image" src="https://github.c" />
+<div align= "center">
+  <img width="500" src="images/arquitetura.png" width="50"/>
+</div>
 
 ## Tecnologias Utilizadas
 
@@ -43,6 +44,53 @@ Siga os passos abaixo para configurar e testar a solução em seu ambiente local
 ### 1. Iniciar o Localstack
 
 Execute o container do Localstack, que irá expor os serviços da AWS na porta `4566`.
+<div align="center">
+<img width="500" height="500" alt="image" src="images/localstacck.png" />
+</div>
 
-```bash
-docker run --rm -it -p 4566:4566 -p 4560-4590:4560-4590 -e DEBUG=1 localstack/localstack
+### 2. Criar a tabela no DynamoDB, o bucket no S3, a função Lambda e o trigger.
+<div align="center">
+<img width="300" height="500" alt="image" src="images/criartabeladynamo.png" />
+<img width="300" height="500" alt="image" src="images/criarlambda.png" />
+<img width="300" height="500" alt="image" src="images/criarnotificacao.png" />
+</div>
+
+### 3. Testar a solução
+Com a infraestrutura pronta, envie um arquivo .json para o bucket e verifique se os dados foram salvos no DynamoDB.
+
+<div align="center">
+<img width="300" height="500" alt="image" src="images/uploadbucket.png" />
+<img width="300" height="500" alt="image" src="images/Captura de tela 2025-10-14 145400.png" />
+</div>
+
+<details> <summary><strong>(Opcional) Expondo a Função com API Gateway</strong></summary>
+
+Para permitir que a função Lambda seja acionada através de requisições HTTP, um API Gateway foi configurado. Os passos detalhados para criar a API, os recursos, os métodos e a integração podem ser encontrados nos scripts do projeto.
+O teste final é realizado com uma chamada POST, enviando um payload JSON diretamente para o endpoint da API:
+<div align="center">
+<img width="300" height="500" alt="image" src="images/criarapi.png" />
+<img width="300" height="500" alt="image" src="images/criarmetodos.png" />
+<img width="300" height="500" alt="image" src="images/registrocriado.png" />
+<img width="300" height="500" alt="image" src="images/scanfinal.png" />
+</div>
+</details>
+
+### O que Aprendi com este Projeto
+Este desafio foi uma excelente oportunidade para aprofundar conhecimentos práticos em diversas áreas-chave da engenharia de software e computação em nuvem:
+
+* Desenvolvimento Cloud-Native Local: O aprendizado mais significativo foi a utilização do Localstack como ferramenta para emular o ambiente AWS. Isso demonstra a capacidade de desenvolver, testar e depurar aplicações serverless complexas de forma offline, reduzindo custos e agilizando o ciclo de desenvolvimento.
+
+* Arquitetura Serverless e Orientada a Eventos: Aprofundei a compreensão sobre como os serviços da AWS se integram de forma desacoplada. A configuração do trigger do S3 para invocar a função Lambda é um exemplo clássico e poderoso desse paradigma.
+
+* Infraestrutura como Código (IaC) com AWS CLI: Embora não tenha usado uma ferramenta declarativa como Terraform ou CloudFormation, provisionar toda a infraestrutura via scripts aws cli reforçou os princípios da IaC. Todo o ambiente pode ser recriado de forma consistente e automatizada.
+
+* Gerenciamento de Serviços AWS: Obtive experiência prática na criação e configuração de recursos essenciais:
+
+* S3: Criação de buckets e, principalmente, configuração de notificações de eventos.
+
+* Lambda: Empacotamento de código, upload, definição de handler, e configuração de variáveis de ambiente.
+
+* DynamoDB: Modelagem de tabelas NoSQL com chaves primárias e definição de capacidade de leitura/escrita.
+
+* Integração de Serviços: A principal habilidade desenvolvida foi conectar os pontos: fazer com que o S3 "conversasse" com a Lambda e a Lambda "conversasse" com o DynamoDB, entendendo os papéis e permissões (mesmo que fictícias no Localstack) que tornam essa comunicação possível.
+
