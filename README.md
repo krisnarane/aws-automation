@@ -16,7 +16,7 @@ O fluxo de dados principal segue o seguinte caminho:
 4.  **Armazenamento**: A função Lambda lê o conteúdo do arquivo `.json`, processa os dados de cada nota fiscal e os insere em uma tabela no DynamoDB.
 
 <div align= "center">
-  <img width="500" src="images/arquitetura.png" width="50"/>
+  <img width="500" src="images/diagramaaws.png" width="50"/>
 </div>
 
 ## Tecnologias Utilizadas
